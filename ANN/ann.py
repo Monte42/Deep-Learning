@@ -52,7 +52,15 @@ ann.add(tf.keras.layers.Dense(units=6,activation='relu'))
 ann.add(tf.keras.layers.Dense(units=6,activation='relu'))
 
 # ADD OUTPUT LAYER
-ann.add(tf.keras.layers.Dense(units=1,activation='sigmoid'))
+ann.add(tf.keras.layers.Dense(units=1,activation='sigmoid')) # softmax if more than 1 neuron
 
 
 
+# ================================
+# TRAIN ARTIFICIAL NEURAL NETWORK
+# ================================
+# COMPILING ANN
+ann.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']) # loss=category_crossentropy if output non-binary
+
+# TRAIN ANN ON TRAINSET
+ann.fit(x_train, y_train, batch_size=32, epochs=100)
