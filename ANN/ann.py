@@ -6,7 +6,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
-
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 # ===================
 # DATA PREPROCESSING
@@ -64,6 +64,25 @@ ann.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']) 
 
 # TRAIN ANN ON TRAINSET
 ann.fit(x_train, y_train, batch_size=32, epochs=40)
+
+
+
+# =====================
+# PREDICT TEST RESULTS
+# =====================
+y_predict = ann.predict(x_test)
+y_predict = (y_predict > .5)
+
+print(np.concatenate((y_predict.reshape(len(y_predict),1), y_test.reshape(len(y_test),1)),1))
+
+
+
+# =================
+# CONFUSION MATRIX
+# =================
+cm = confusion_matrix(y_test, y_predict)
+print(cm)
+accuracy_score(y_test, y_predict)
 
 
 
