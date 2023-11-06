@@ -6,7 +6,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
-
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 # ===================
 # DATA PREPROCESSING
@@ -38,13 +38,74 @@ x_test = sc.fit_transform(x_test)
 # print(x_test)
 
 
+
 # ======================================
 # BUILDING THE ARTIFICIAL NEURAL NETWORK
 # ======================================
 # INITIALIZE THE ANN
+ann = tf.keras.models.Sequential()
 
 # ADD IPUT LAYER AND FIRST HIDDEN LAYER
+ann.add(tf.keras.layers.Dense(units=6,activation='relu'))
 
 # ADD SECOND HIDDEN LAYER
+ann.add(tf.keras.layers.Dense(units=6,activation='relu'))
 
 # ADD OUTPUT LAYER
+ann.add(tf.keras.layers.Dense(units=1,activation='sigmoid')) # softmax if more than 1 neuron
+
+
+
+# ================================
+# TRAIN ARTIFICIAL NEURAL NETWORK
+# ================================
+# COMPILING ANN
+ann.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']) # loss=category_crossentropy if output non-binary
+
+# TRAIN ANN ON TRAINSET
+ann.fit(x_train, y_train, batch_size=32, epochs=40)
+
+
+
+# =====================
+# PREDICT TEST RESULTS
+# =====================
+y_predict = ann.predict(x_test)
+y_predict = (y_predict > .5)
+
+print(np.concatenate((y_predict.reshape(len(y_predict),1), y_test.reshape(len(y_test),1)),1))
+
+
+
+# =================
+# CONFUSION MATRIX
+# =================
+cm = confusion_matrix(y_test, y_predict)
+print(cm)
+accuracy_score(y_test, y_predict)
+
+
+
+# =========
+# HOMEWORK
+# =========
+# Make a singler prediction for the one customer below using the trained ANN model 
+
+# 'Geography': 'France',
+# 'CreditScore': 600,
+# 'Gender': 'Male',
+# 'Age': 40,
+# "Tenure": 3,
+# 'Balance': 6000,
+# 'NumberOfPrducts': 2,
+# 'HasCrCard': 1,
+# 'IsActiveMember': 1,
+# 'EstimatedSalary': 50000,
+
+data  = [[1,0,0,600,1,40,3,60000,2,1,1,50000]]
+
+data = sc.transform(data)
+
+print(f'Probabilty of customer leaving: {ann.predict(data)}')
+print('Customer will leave') if ann.predict(data) > .5 else print('Customer will stay')
+
