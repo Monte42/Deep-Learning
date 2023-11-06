@@ -38,13 +38,21 @@ x_test = sc.fit_transform(x_test)
 # print(x_test)
 
 
+
 # ======================================
 # BUILDING THE ARTIFICIAL NEURAL NETWORK
 # ======================================
 # INITIALIZE THE ANN
+ann = tf.keras.models.Sequential()
 
 # ADD IPUT LAYER AND FIRST HIDDEN LAYER
+ann.add(tf.keras.layers.Dense(units=6,activation='relu'))
 
 # ADD SECOND HIDDEN LAYER
+ann.add(tf.keras.layers.Dense(units=6,activation='relu'))
 
 # ADD OUTPUT LAYER
+ann.add(tf.keras.layers.Dense(units=1,activation='sigmoid'))
+
+
+
