@@ -63,4 +63,30 @@ ann.add(tf.keras.layers.Dense(units=1,activation='sigmoid')) # softmax if more t
 ann.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']) # loss=category_crossentropy if output non-binary
 
 # TRAIN ANN ON TRAINSET
-ann.fit(x_train, y_train, batch_size=32, epochs=100)
+ann.fit(x_train, y_train, batch_size=32, epochs=40)
+
+
+
+# =========
+# HOMEWORK
+# =========
+# Make a singler prediction for the one customer below using the trained ANN model 
+
+# 'Geography': 'France',
+# 'CreditScore': 600,
+# 'Gender': 'Male',
+# 'Age': 40,
+# "Tenure": 3,
+# 'Balance': 6000,
+# 'NumberOfPrducts': 2,
+# 'HasCrCard': 1,
+# 'IsActiveMember': 1,
+# 'EstimatedSalary': 50000,
+
+data  = [[1,0,0,600,1,40,3,60000,2,1,1,50000]]
+
+data = sc.transform(data)
+
+print(f'Probabilty of customer leaving: {ann.predict(data)}')
+print('Customer will leave') if ann.predict(data) > .5 else print('Customer will stay')
+
