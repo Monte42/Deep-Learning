@@ -88,4 +88,14 @@ cnn.fit(x=train_ds, validation_data=val_ds, epochs=100)
 # ==================
 # SINGLE PREDICTIONS
 # ==================
-
+path = 'G:/Documents/Deep Learning/CNN/dataset/single_prediction'
+expected_results = ['dog','cat','cat','dog','cat','dog']
+print(expected_results)
+for file in os.listdir(path):
+    test_img = tf.keras.utils.load_img(f'dataset/single_prediction/{file}', target_size=(64,64))
+    test_img = tf.keras.utils.img_to_array(test_img)
+    test_img = np.expand_dims(test_img, axis=0)
+    result = cnn.predict(test_img)
+    anml = 'Dog' if result > .5 else 'Cat'
+    print(file)
+    print(anml)
