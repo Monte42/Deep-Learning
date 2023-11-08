@@ -35,34 +35,30 @@ test_set = test_data_gen(
 # BUILD CONVOLUTION NEURAL NETWORK
 # =================================
 # INITIALIZE CONVOLUTION NEURAL NETWORK
-
+cnn = tf.keras.models.Sequential()
 
 
 # CONVOLUTION
-
-
+cnn.add(tf.keras.layers.Conv2D(filters=32, kernel_size=3, activation='relu', input_shape=(64,64,3)))
 
 # POOLING
-
-
+cnn.add(tf.keras.layers.MaxPool2D(pool_size=2, stides=2))
 
 # ADD SECOND CONVOLUTION
-
-
+cnn.add(tf.keras.layers.Conv2D(filters=32, kernel_size=3, activation='relu'))
+cnn.add(tf.keras.layers.MaxPool2D(pool_size=2, stides=2))
 
 # FLATTENING
-
-
+cnn.add(tf.keras.layers.Flatten())
 
 # FULL CONNECTION WITH ANN
-
-
+ann = tf.keras.models.Sequential()
+ann.add(tk.keras.layers.Dense(units=128, activation='relu'))
+ann.add(tk.keras.layers.Dense(units=128, activation='relu'))
+ann.add(tk.keras.layers.Dense(units=128, activation='relu'))
 
 # ADD OUTPUT LAYER
-
-
-
-
+ann.add(tk.keras.layers.Dense(units=1, activation='sigmoid'))
 
 # ==========
 # TRAIN CNN
