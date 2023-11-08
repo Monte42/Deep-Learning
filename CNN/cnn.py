@@ -15,7 +15,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
     image_size=(64,64),
     batch_size=32
 )
-class_names = train_ds.class_names
+# class_names = train_ds.class_names
 val_ds = tf.keras.utils.image_dataset_from_directory(
     'dataset/test_set',
     validation_split=0.2,
@@ -89,7 +89,7 @@ cnn.fit(x=train_ds, validation_data=val_ds, epochs=100)
 # SINGLE PREDICTIONS
 # ==================
 path = 'G:/Documents/Deep Learning/CNN/dataset/single_prediction'
-expected_results = ['dog','cat','cat','dog','cat','dog']
+expected_results = ['dog','cat','cat','dog','cat','dog','cat']
 print(expected_results)
 for file in os.listdir(path):
     test_img = tf.keras.utils.load_img(f'dataset/single_prediction/{file}', target_size=(64,64))
