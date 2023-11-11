@@ -92,7 +92,6 @@ predicted_stock_price = regressor.predict(x_test)
 predicted_stock_price = sc.inverse_transform(predicted_stock_price)
 print(predicted_stock_price)
 
-
 # Plot
 plt.plot(real_stock_price, color="blue", label="Actual Stock Prices")
 plt.plot(predicted_stock_price, color="green", label="Predicted Stock Prices")
@@ -101,3 +100,4 @@ plt.xlabel('Time')
 plt.ylabel('Price')
 plt.legend()
 plt.show()
+
