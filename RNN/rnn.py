@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Dropout 
 
@@ -37,17 +38,17 @@ x_train = np.reshape(x_train, (x_train.shape[0],x_train.shape[1], 1)) # (batch_s
 regressor = Sequential() # Regressor vs rnn name because its a continuing value
 
 # Adding first LSTM layer
-regressor.add(LSTM(untis=60, return_sequences=True, input_shape=(x_train.shape[1],1)))
+regressor.add(LSTM(units=60, return_sequences=True, input_shape=(x_train.shape[1],1)))
 regressor.add(Dropout(.2))
 
 # Adding additional LSTM layers
-regressor.add(LSTM(untis=60, return_sequences=True))
+regressor.add(LSTM(units=60, return_sequences=True))
 regressor.add(Dropout(.2))
-regressor.add(LSTM(untis=60, return_sequences=True))
+regressor.add(LSTM(units=60, return_sequences=True))
 regressor.add(Dropout(.2))
 
 # Adding final LSTM layer
-regressor.add(LSTM(untis=60))
+regressor.add(LSTM(units=60))
 regressor.add(Dropout(.2))
 
 # Oputput Layer
@@ -61,7 +62,7 @@ regressor.compile(optimizer='adam', loss='mean_squared_error')
 # =================
 # TRAINING THE RNN
 # =================
-
+regressor.fit(x_train, y_train, epochs=100, batch_size=32)
 
 
 
