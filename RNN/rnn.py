@@ -12,6 +12,9 @@ from keras.layers import Dense, LSTM, Dropout
 # Import Train Set
 dataset_train = pd.read_csv('datasets/Google_Stock_Price_Train.csv')
 training_set = dataset_train.iloc[:,1:2].values
+# Import Test Set
+dataset_test = pd.read_csv('datasets/Google_Stock_Price_Test.csv')
+real_stock_price = dataset_test.iloc[:,1:2].values
 
 # Feature Scaling
 sc = MinMaxScaler(feature_range=(0,1), copy=True) # these are default and dont need to add
@@ -69,3 +72,32 @@ regressor.fit(x_train, y_train, epochs=100, batch_size=32)
 # ===============================================
 # MAKING PREDICTIONS AND VISUALIZING THE RESULTS
 # ===============================================
+# combine datasets
+dataset_total = pd.concat((dataset_train['Open'], dataset_test['Open']), axis=0)
+# Get 60 days prior to test as np array
+inputs = dataset_total[len(dataset_total)-len(dataset_test)-60 : ].values
+inputs = inputs.reshape(-1,1)
+inputs = sc.transform(inputs)
+
+x_test = []
+for i in range(60,80): # Get last 20 days ( 60th day - 80th )
+    x_test.append(inputs[i-60:i, 0]) 
+x_test = np.array(x_test)
+
+x_test = np.reshape(x_test, (x_test.shape[0],x_test.shape[1], 1))
+
+predicted_stock_price = regressor.predict(x_test)
+
+# reverse scaling
+predicted_stock_price = sc.inverse_transform(predicted_stock_price)
+print(predicted_stock_price)
+
+# Plot
+plt.plot(real_stock_price, color="blue", label="Actual Stock Prices")
+plt.plot(predicted_stock_price, color="green", label="Predicted Stock Prices")
+plt.title('Google Stock Price Jan 2017')
+plt.xlabel('Time')
+plt.ylabel('Price')
+plt.legend()
+plt.show()
+
