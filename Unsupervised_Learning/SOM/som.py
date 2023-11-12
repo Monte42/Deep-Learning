@@ -42,6 +42,6 @@ for i,j in enumerate(x):
 show()
 
 mappings = som.win_map(x)
-frauds = mappings[(8,1)]
+frauds = np.concatenate((mappings[(8,1)],mappings[(8,1)]), axis=0)
 frauds = sc.inverse_transform(frauds)
 print(frauds)
