@@ -42,8 +42,6 @@ for i,j in enumerate(x):
 show()
 
 mappings = som.win_map(x)
-print(mappings[(8,1)])
-print('')
 frauds = mappings[(8,1)]
 frauds = sc.inverse_transform(frauds)
 print(frauds)
