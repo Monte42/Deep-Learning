@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 import os
 
+
 # =====================
 # DATA PRE_PROCESSING
 # =====================
@@ -88,7 +89,7 @@ cnn.fit(x=train_ds, validation_data=val_ds, epochs=100)
 # ==================
 # SINGLE PREDICTIONS
 # ==================
-path = 'G:/Documents/Deep Learning/CNN/dataset/single_prediction'
+path = 'G:/Documents/Deep Learning/Supervised_Learning/CNN/dataset/single_prediction'
 expected_results = ['dog','cat','cat','cat','dog','cat','dog']
 print(expected_results)
 for file in os.listdir(path):
