@@ -117,3 +117,28 @@ for e in range(1, num_epoch+1):
         train_loss += torch.mean(torch.abs(v0[v0>0]-vk[v0>0]))
         count += 1
     print(f"Epoch: {str(e)} loss: {str(train_loss/count)}")
+
+
+
+
+# ==========
+# TEST RBM
+# ==========
+def test_rbm(n1,n2):
+    test_loss = 0
+    count = 0.
+    for user_id in range(num_users):
+        v = training_set[user_id+n1:user_id+n2]
+        vt = test_set[user_id+n1:user_id+n2]
+        if len(vt[vt >= 0]) > 0:
+            _,h = rbm.sample_h(v)
+            _,k = rbm.sample_v(h)
+            test_loss += torch.mean(torch.abs(vt[vt >= 0] - v[vt >= 0]))
+            count += 1
+    print(f"Test Loss: {str(test_loss/count)}")
+
+test_rbm(0,1)
+test_rbm(1,2)
+test_rbm(2,3)
+test_rbm(3,4)
+test_rbm(4,5)
