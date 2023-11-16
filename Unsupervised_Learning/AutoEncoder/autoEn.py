@@ -51,10 +51,10 @@ test_set = torch.FloatTensor(test_set)
 class SAE(nn.Module):
     def __init__(self, ):
         super(SAE, self).__init__()
-        self.full_connection_1 = nn.Linear(num_movies, 22)
-        self.full_connection_2 = nn.Linear(22, 8)
-        self.full_connection_3 = nn.Linear(8, 22)
-        self.full_connection_4 = nn.Linear(22, num_movies)
+        self.full_connection_1 = nn.Linear(num_movies, 24)
+        self.full_connection_2 = nn.Linear(24, 10)
+        self.full_connection_3 = nn.Linear(10, 24)
+        self.full_connection_4 = nn.Linear(24, num_movies)
         self.activation = nn.Sigmoid()
     def forward_prop(self, x):
         x = self.activation(self.full_connection_1(x))
@@ -67,3 +67,37 @@ class SAE(nn.Module):
 sae = SAE()
 criterion = nn.MSELoss()
 optimizer = optim.RMSprop(sae.parameters(), lr = 0.012, weight_decay = 0.05)
+# Training tha SAE
+ephocs = 300
+for e in range(1, ephocs+1):
+    train_loss = 0
+    users_who_rated_movies = 0.
+    for user_id in range(num_users):
+        input_vector = Variable(training_set[user_id]).unsqueeze(0)
+        target = input_vector.clone()
+        if torch.sum(target.data > 0) > 0:
+            output_vector = sae.forward_prop(input_vector)
+            target.require_grad = False
+            output_vector[target == 0] = 0
+            loss = criterion(output_vector, target)
+            mean_corrector = num_movies/float(torch.sum(target.data > 0)+ 1e-10)
+            loss.backward()
+            train_loss += np.sqrt(loss.data.item() * mean_corrector)
+            users_who_rated_movies += 1.
+            optimizer.step()
+    print(f'Epoch: {str(e)} - Loss: {str(train_loss/users_who_rated_movies)}')
+
+test_loss = 0
+users_who_rated_movies = 0
+for user_id in range(num_users):
+    input_vector = Variable(training_set[user_id]).unsqueeze(0)
+    target = Variable(test_set[user_id]).unsqueeze(0)
+    if torch.sum(target.data > 0) > 0:
+        output_vector = sae.forward_prop(input_vector)
+        target.require_grad = False
+        output_vector[target == 0] = 0
+        loss = criterion(output_vector, target)
+        mean_corrector = num_movies/float(torch.sum(target.data > 0)+ 1e-10)
+        test_loss += np.sqrt(loss.data.item())
+        users_who_rated_movies += 1.
+print(f'Test Loss: {str(test_loss/users_who_rated_movies)}')
