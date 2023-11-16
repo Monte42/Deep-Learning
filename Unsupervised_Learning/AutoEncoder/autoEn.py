@@ -42,3 +42,28 @@ test_set = convert(test_set)
 # Convert Matrixs into Torch Tensors
 training_set = torch.FloatTensor(training_set)
 test_set = torch.FloatTensor(test_set)
+
+
+
+# ============================
+# Design Stacked Auto Encoder
+# ============================
+class SAE(nn.Module):
+    def __init__(self, ):
+        super(SAE, self).__init__()
+        self.full_connection_1 = nn.Linear(num_movies, 22)
+        self.full_connection_2 = nn.Linear(22, 8)
+        self.full_connection_3 = nn.Linear(8, 22)
+        self.full_connection_4 = nn.Linear(22, num_movies)
+        self.activation = nn.Sigmoid()
+    def forward_prop(self, x):
+        x = self.activation(self.full_connection_1(x))
+        x = self.activation(self.full_connection_2(x))
+        x = self.activation(self.full_connection_3(x))
+        x = self.full_connection_4(x)
+        return x
+
+# Initialize SAE
+sae = SAE()
+criterion = nn.MSELoss()
+optimizer = optim.RMSprop(sae.parameters(), lr = 0.012, weight_decay = 0.05)
